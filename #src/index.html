@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.min.css" />
-  </head>
+<html lang="ru">
+  @@include('components/head.html', {"title":"HomePage"})
   <body>
-    @@include('components/header.html')
-    <img src="img/ab78aa295baae691777f08889d7d2c39.jpg" alt="" />
-    <script src="js/main.min.js"></script>
+    <div class="wrapper">
+      @@include('components/header.html')
+      <main class="page"></main>
+      @@include('components/footer.html')
+    </div>
+    <!-- @@include('components/popup.html')
+    @@include('components/js.html') -->
   </body>
 </html>

@@ -13,19 +13,19 @@ let path = {
   },
   src: {
     html: source_folder + '/*.html',
-    css: source_folder + '/scss/**/*.scss',
+    css: source_folder + '/scss/style.scss',
     js: source_folder + '/js/main.js',
     img: source_folder + '/img/**/*.*',
     // img: source_folder + '/img/**/*.{jpg, png, svg, gif, ico, webp}',
-    fonts: source_folder + '/fonts/**/*.*',
+    fonts: source_folder + '/fonts/**/*.ttf',
     svg: source_folder + '/svg/*.svg',
   },
   watch: {
     html: source_folder + '/*.html',
-    css: source_folder + '/scss/**/*.scss',
+    css: source_folder + '/scss/style.scss',
     js: source_folder + '/js/main.js',
     img: source_folder + '/img/**/*.*',
-    fonts: source_folder + '/fonts/**/*.*',
+    fonts: source_folder + '/fonts/**/*.ttf',
     svg: source_folder + '/svg/',
   },
   clean: './' + project_folder + '/'
@@ -48,6 +48,8 @@ let {src, dest} = require('gulp'),
   webpCss = require('gulp-webp-css'),  // плагин встраивает webp в css
   svgSprite = require('gulp-svg-sprite'),   // плагин делает svg sprite 
   cheerio = require('gulp-cheerio');  // плагин убирает тэги в svg sprite 
+  ttf2woff = require("gulp-ttf2woff") // ttf в woff 
+  ttf2woff2 = require("gulp-ttf2woff2") // ttf в woff2 
 
   /* ЗАДАЧИ*/
  
@@ -73,11 +75,13 @@ function html() {
 // 3. CSS
 function css() {
   return src(path.src.css) // выбор всех css файлов по указанному пути
+    // .pipe(scss({}))
     .pipe(scss({outputStyle: 'expanded'}))
-    .pipe(group_media())
+    // .pipe(group_media())
     .pipe(autoprefixer({overrideBrowserslist: ["last 10 version"], grid: true, cascade:true }))
-    .pipe(webpCss())
+    // .pipe(webpCss())
     .pipe(gulp.dest(path.build.css)) // выгружаем build до сжатия css 
+
     .pipe(cleanCSS()) // минимизируем CSS
     .pipe(rename({
       extname: ".min.css"
@@ -152,10 +156,20 @@ const svg = () => {
     .pipe(browsersync.stream());
 };
 
-// 7. ПРОСТО КОПИРУЕМ ШРИФТЫ ИЗ SRC В BUILD
+// 7.1. ttf в woff и ttf в woff2
 function fonts() {
-    src([source_folder + "/fonts/*.*"])
-        .pipe(dest(path.build.fonts))
+    src([source_folder + "/fonts/*.ttf"])
+      .pipe(ttf2woff())
+      .pipe(dest(path.build.fonts))
+    return src(path.src.fonts)
+      .pipe(ttf2woff2())
+      .pipe(dest(path.build.fonts))
+};
+
+// 7.2. ПРОСТО КОПИРУЕМ woff и woff2 ШРИФТЫ ИЗ SRC В BUILD
+function fonts_copy() {
+    src([source_folder + "/fonts/*.{woff,woff2}"])
+      .pipe(dest(path.build.fonts))
 };
 
 // 8. ПРОСМОТР ФАЙЛОВ
@@ -173,7 +187,7 @@ function clean(params) {
 }
 
 // 10. ЗАПУСК ЗАДАЧ 
-let build = gulp.series(clean, gulp.parallel(js, css, html, images, svg, fonts));
+let build = gulp.series(clean, gulp.parallel(js, css, html, images, svg, fonts, fonts_copy));
 let watch = gulp.parallel(build, watchFiles, browserSync);
 
 exports.images = images;
@@ -185,3 +199,4 @@ exports.watch = watch;
 exports.default = watch;
 exports.svg = svg;
 exports.fonts = fonts;
+exports.fonts_copy = fonts_copy;
