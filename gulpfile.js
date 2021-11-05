@@ -21,8 +21,8 @@ let path = {
     svg: source_folder + '/svg/*.svg',
   },
   watch: {
-    html: source_folder + '/*.html',
-    css: source_folder + '/scss/style.scss',
+    html: source_folder + '/**/*.html',
+    css: source_folder + '/scss/**/*.scss',
     js: source_folder + '/js/main.js',
     img: source_folder + '/img/**/*.*',
     fonts: source_folder + '/fonts/**/*.ttf',
@@ -67,7 +67,7 @@ function browserSync(params) {
 function html() {
   return src(path.src.html) // выбор всех html файлов по указанному пути
     .pipe(fileinclude()) 
-    .pipe(webpHTML())
+    // .pipe(webpHTML())
     .pipe(dest(path.build.html)) // выкладывание готовых файлов
     .pipe(browsersync.stream()) // перезагрузка сервера
 }
@@ -106,9 +106,6 @@ function js() {
 // 5. IMAGES
 function images() {
   return src(path.src.img) // выбор всех html файлов по указанному пути
-  .pipe(webp({quality: 70}))
-  .pipe(dest(path.build.img)) // выкладывание готовых файлов
-  .pipe (src(path.src.img))
   .pipe(imagemin([
 	      imagemin.gifsicle({interlaced: true}),
 	      imagemin.mozjpeg({ progressive: true}),
@@ -122,6 +119,27 @@ function images() {
     .pipe(dest(path.build.img)) // выкладывание готовых файлов
     .pipe(browsersync.stream()) // перезагрузка сервера
 }
+
+// 5. IMAGES
+// function images() {
+//   return src(path.src.img) // выбор всех html файлов по указанному пути
+//   .pipe(webp({quality: 70}))
+//   .pipe(dest(path.build.img)) // выкладывание готовых файлов
+//   .pipe (src(path.src.img))
+//   .pipe(imagemin([
+// 	      imagemin.gifsicle({interlaced: true}),
+// 	      imagemin.mozjpeg({ progressive: true}),
+// 	      imagemin.optipng({optimizationLevel: 3}),
+// 	      imagemin.svgo({
+// 		      plugins: [
+// 			      {removeViewBox: false}
+// 		        ]
+// 	      })
+//       ]))
+//     .pipe(dest(path.build.img)) // выкладывание готовых файлов
+//     .pipe(browsersync.stream()) // перезагрузка сервера
+// }
+
 
 // 6. SVG SPRITE
 const svg = () => {

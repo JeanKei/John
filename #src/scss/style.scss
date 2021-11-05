@@ -24,7 +24,7 @@ body {
 $minWidth: 320px;
 $maxWidth: 1125px;
 $maxWidthContainer: 856px;
-$md1: $maxWidthContainer + 12;
+$md1: $maxWidthContainer;
 $md2: 991.98;
 $md3: 767.98;
 $md4: 479.98;
@@ -35,23 +35,72 @@ $md4: 479.98;
 @import "null";
 
 body {
-  color: black;
+  color: #21243d;
   font-size: 14px;
 }
 //=====</ОБНУЛЕНИЕ ОБЩИЕ, ПАРАМЕТРЫ>======
 
 //===============<ОБОЛОЧКА>===============
-// .wrapper {
-// }
+.wrapper {
+  // padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
 //==============</ОБОЛОЧКА>===============
 
 //=========</ОСНОВАНАЯ СЕТКА>=============
 ._container {
-  max-width: $maxWidthContainer + px;
+  // max-width: $maxWidthContainer + px;
+  max-width: $maxWidthContainer;
   margin: 0 auto;
+  @media (max-width: $md1) {
+    max-width: 750px;
+  }
 }
 //========</ОСНОВАНАЯ СЕТКА>==============
 
 //=================<ПОДКЛЮЧЕНИЕ ФАЙЛОВ UI СТИЛЕЙ, ФОРМ И ГОТОВЫХ КЛАСОВ>===============
-@import "header";
+@import "ui";
+@import "forms";
 //================</ПОДКЛЮЧЕНИЕ ФАЙЛОВ UI СТИЛЕЙ, ФОРМ И ГОТОВЫХ КЛАСОВ>===============
+
+//===================<ПОДКЛЮЧЕНИЕ ФАЙЛОВ СТИЛЕЙ СТРАНИЦ И ЭЛЕМЕНТОВ>===================
+// @import "popup";
+@import "header";
+@import "footer";
+@import "home";
+@import "works";
+@import "blog";
+@import "article";
+//===================</ПОДКЛЮЧЕНИЕ ФАЙЛОВ СТИЛЕЙ СТРАНИЦ И ЭЛЕМЕНТОВ>==================
+
+//==================================<ОСНОВНОЙ БЛОК>====================================
+.page {
+  padding-top: 90px;
+  flex: 1 1 auto;
+  @media (max-width: $md3) {
+    padding-top: 30px;
+  }
+}
+// =======================================================================================
+.social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // .social__item
+  &__item {
+    margin: 0 17px;
+    font-size: 30px;
+    color: inherit;
+    transition: all 0.3s ease 0s;
+    @media (min-width: $md3) {
+      &:hover {
+        color: #ff6464;
+      }
+    }
+  }
+}
+//=================================</ОСНОВНОЙ БЛОК>====================================
